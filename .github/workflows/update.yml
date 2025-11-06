@@ -42,4 +42,4 @@ jobs:
           else
             git commit -m "Actualización automática de ranking [$(date '+%Y-%m-%d %H:%M:%S')]"
             git push
-
+          fi

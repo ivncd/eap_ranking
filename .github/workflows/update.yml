@@ -1,28 +1,28 @@
-
 name: Actualizar ranking semanal
 
 on:
   schedule:
-    # 19:00 UTC = 20:00 CET (hora España)
     - cron: "0 19 * * 4"
-  workflow_dispatch:  # Permite ejecución manual opcional
+  workflow_dispatch:
+
+permissions:
+  contents: write  # permite push
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout del repositorio
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          persist-credentials: true  # permite push con GITHUB_TOKEN
+          persist-credentials: true
 
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Instalar dependencias (si las hay)
+      - name: Instalar dependencias
         run: |
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
@@ -38,9 +38,8 @@ jobs:
         run: |
           git add index.md
           if git diff --cached --quiet; then
-            echo "Sin cambios en index.md, no se hace commit."
+            echo "Sin cambios en index.md."
           else
             git commit -m "Actualización automática de ranking [$(date '+%Y-%m-%d %H:%M:%S')]"
             git push
-          fi
 

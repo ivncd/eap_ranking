@@ -1,3 +1,9 @@
+|   Ranking | Usuario              |   Nota A /5 |   Nota A+B /7 |   Nota A+B+C /9 |   Nota A+B+C+D /10 |
+|-----------|----------------------|-------------|---------------|-----------------|--------------------|
+|         1 | anwei.ji             |         4.9 |           5.4 |             6.7 |                6.7 |
+|         2 | gonzalo.gelado       |         5   |           6.2 |             6.2 |                6.2 |
+|         3 | ivan.collado         |         5   |           5.9 |             5.9 |                5.9 |
+|         4 | al.rodriguezdeguzman |         4.6 |           5.6 |             5.6 |                5.6 |
 |         5 | pablo.rodriguezp     |         4.8 |           5.6 |             5.6 |                5.6 |
 |         6 | jesus.quiroga        |         4.5 |           5.4 |             5.4 |                5.4 |
 |         7 | jenny.zhu            |         4.9 |           5.3 |             5.3 |                5.3 |

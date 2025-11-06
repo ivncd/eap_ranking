@@ -1,3 +1,9 @@
+# Clasificación El Arte de Programar 2025
+
+---
+
+*Última actualización: 06/11/2025 21:06*
+
 |   Ranking | Usuario              |   Nota A /5 |   Nota A+B /7 |   Nota A+B+C /9 |   Nota A+B+C+D /10 |
 |-----------|----------------------|-------------|---------------|-----------------|--------------------|
 |         1 | anwei.ji             |         5   |           6.5 |             8.8 |                8.8 |

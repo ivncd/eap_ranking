@@ -57,7 +57,7 @@ def transform_table(table : str) -> str:
 
     spain_tz = ZoneInfo("Europe/Madrid")
     time = datetime.now(spain_tz).strftime("%d/%m/%Y %H:%M")
-    result += "---\n\n"
+    result += "\n"
     result += f"*Última actualización: {time}*\n\n"
     result += table
 

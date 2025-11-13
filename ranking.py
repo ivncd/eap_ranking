@@ -49,8 +49,25 @@ def obtain_grades(result):
     return grades.items()
 
 def get_table(grades_list):
-    table = [[pos+1, user, *grades] for pos, (user, grades) in enumerate(grades_list)]
-    return tabulate(table, headers=["Ranking", "Usuario", "Nota A /5", "Nota A+B /7", "Nota A+B+C /9", "Nota A+B+C+D /10"],tablefmt="github")
+    table = []
+    prev_grade = None
+    rank = 0
+    display_rank = 0
+
+    for pos, (user, grades) in enumerate(grades_list):
+        total = grades[-1]
+        rank += 1
+        if total != prev_grade:
+            display_rank = rank
+            prev_grade = total
+        table.append([display_rank, user, *grades])
+
+    return tabulate(
+        table,
+        headers=["Ranking", "Usuario", "Nota A /5", "Nota A+B /7", "Nota A+B+C /9", "Nota A+B+C+D /10"],
+        tablefmt="github"
+    )
+
 
 def transform_table(table : str) -> str:
     result = "# Clasificación El Arte de Programar 2025\n\n"

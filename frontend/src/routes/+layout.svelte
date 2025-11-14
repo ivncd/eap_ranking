@@ -5,6 +5,7 @@
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { ModeWatcher, toggleMode, mode } from "mode-watcher";
 	import { Sun, Moon } from "lucide-svelte";
+	import { resolve } from "$app/paths";
 
 	export const prerender = false;
 
@@ -19,7 +20,10 @@
 
 <header class="w-full p-4 border-b flex items-center justify-center relative">
 	<!-- Title -->
-	<a href="/" class="no-underline absolute left-1/2 -translate-x-1/2">
+	<a
+		href={resolve("/")}
+		class="no-underline absolute left-1/2 -translate-x-1/2"
+	>
 		<h1 class="text-2xl font-bold cursor-pointer hover:opacity-80">
 			El Arte de Programar
 		</h1>

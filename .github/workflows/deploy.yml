@@ -1,0 +1,58 @@
+name: Update DB + Build Frontend + Deploy
+
+on:
+  schedule:
+    - cron: "20 18 * * 4"   # every Thursday 18:20
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # --- CHECKOUT REPO ---
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # --- PYTHON SETUP ---
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: |
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      - name: Run update script (update.py)
+        run: python3 update.py
+
+      # --- NODE / SVELTE SETUP ---
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.17.0'
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Build SvelteKit project
+        working-directory: frontend
+        run: npm run build
+
+      # --- DEPLOY DIST TO GH-PAGES ---
+      - name: Deploy /dist to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages

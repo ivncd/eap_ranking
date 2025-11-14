@@ -2,7 +2,7 @@
 
 <div style='display: flex; justify-content: center; gap: 1em'><a href='#clasificación-el-arte-de-programar-2025'>Ranking</a><p>•</p><a href='#clasificación-final'>Ranking final</a></div>
 
-*Última actualización: 14/11/2025 01:19*
+*Última actualización: 14/11/2025 01:22*
 
 |   Ranking | Usuario              |   Nota A /5 |   Nota A+B /7 |   Nota A+B+C /9 |   Nota A+B+C+D /10 |
 |-----------|----------------------|-------------|---------------|-----------------|--------------------|

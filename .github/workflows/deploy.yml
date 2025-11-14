@@ -1,8 +1,6 @@
 name: Update DB + Build Frontend + Deploy
 
 on:
-  schedule:
-    - cron: "20 18 * * 4"   # every Thursday 18:20
   workflow_dispatch:
   push:
     branches:
@@ -39,7 +37,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.17.0'
+          node-version: '20.x'
 
       - name: Install frontend dependencies
         working-directory: frontend

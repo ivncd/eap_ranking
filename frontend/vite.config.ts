@@ -7,8 +7,5 @@ export default defineConfig({
 		allowedHosts: ['localhost', "nonterritorial-marguerite-nattily.ngrok-free.dev"]
 	},
 	plugins: [tailwindcss(), sveltekit()],
-	build: {
-		outDir: '../dist',
-		emptyOutDir: true,
-	},
+
 });

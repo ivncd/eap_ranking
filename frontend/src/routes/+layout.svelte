@@ -6,6 +6,8 @@
 	import { ModeWatcher, toggleMode, mode } from "mode-watcher";
 	import { Sun, Moon } from "lucide-svelte";
 
+	export const prerender = false;
+
 	let { children } = $props();
 </script>
 

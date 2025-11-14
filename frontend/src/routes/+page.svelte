@@ -1,5 +1,6 @@
 <script lang="ts">
   import * as Table from "$lib/components/ui/table/index.ts";
+  import { resolve } from "$app/paths";
 
   export let data;
   const { last_updated, rankings } = data;
@@ -29,7 +30,7 @@
           <Table.Cell class="font-medium">{row.ranking}</Table.Cell>
           <Table.Cell>
             <a
-              href={`/user/${row.user}`}
+              href={resolve("/user/[user_name]", { user_name: row.user })}
               class="text-blue-600 hover:text-blue-800 hover:underline transition-colors"
             >
               {row.user}

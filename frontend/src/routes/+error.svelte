@@ -1,6 +1,7 @@
 <script>
   import { page } from "$app/state";
   import Button from "$lib/components/ui/button/button.svelte";
+  import { resolve } from "$app/paths";
 </script>
 
 <div class="px-5 text-center mt-[20vh] mb-[10vh]">
@@ -14,5 +15,5 @@
     {page.error?.message}
   </h2>
 
-  <Button href="/">Volver al inicio</Button>
+  <Button href={resolve("/")}>Volver al inicio</Button>
 </div>

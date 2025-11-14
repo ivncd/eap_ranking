@@ -1,12 +1,8 @@
 name: Update DB + Build Frontend + Deploy
 
 on:
-  schedule:
-    - cron: "20 18 * * 4"   # every Thursday 18:20
   workflow_dispatch:
-  push:
-    branches:
-      - main
+
 
 permissions:
   contents: write

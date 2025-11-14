@@ -1,15 +1,20 @@
 import requests
+import pandas as pd
 from collections import defaultdict
 from bs4 import BeautifulSoup
+from requests.api import get
 from tabulate import tabulate
 
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
 spain_tz = ZoneInfo("Europe/Madrid")
-now_spain = datetime.now(spain_tz)
+now_spain = datetime.now(spain_tz).strftime("%d/%m/%Y %H:%M")
 
 URL = "http://138.100.11.198/notas"
+INDEX_FILE = "index.md"
+FINISHED_CSV = "finished.csv"
+
 def obtain_text():
     r = requests.get(URL)
     return r.text
@@ -48,14 +53,18 @@ def obtain_grades(result):
 
     return grades.items()
 
-def get_table(grades_list):
+def get_ranking_table(grades_list):
     table = []
     prev_grade = None
     rank = 0
     display_rank = 0
 
-    for pos, (user, grades) in enumerate(grades_list):
+    for _, (user, grades) in enumerate(grades_list):
         total = grades[-1]
+
+        if total == 9:
+            continue
+
         rank += 1
         if total != prev_grade:
             display_rank = rank
@@ -68,15 +77,56 @@ def get_table(grades_list):
         tablefmt="github"
     )
 
+def get_csv_data():
+    return pd.read_csv(FINISHED_CSV)
 
-def transform_table(table : str) -> str:
+def save_csv(df):
+    df.to_csv(FINISHED_CSV, index=False)
+    
+def get_finished_table(grades_list):
+    df = get_csv_data()
+    rank = 0
+    current_date = datetime.now().strftime("%d/%m/%Y")
+
+    if not df.empty:
+        rank = df["Rank"].iloc[-1]
+
+    rank += 1
+    for _, (user, grades) in enumerate(grades_list):
+        total = grades[-1]
+        if total != 9 or user in df["Usuario"].values:
+            continue
+
+        df.loc[len(df)] = [rank, user, current_date]
+
+    save_csv(df)
+
+    return tabulate(
+        df,
+        headers=["Ranking", "Usuario", "Fecha fin"],
+        tablefmt="github",
+        showindex=False
+    )
+
+
+def create_index(ranking_table : str, finished_table : str) -> str:
     result = "# Clasificación El Arte de Programar 2025\n\n"
 
-    spain_tz = ZoneInfo("Europe/Madrid")
-    time = datetime.now(spain_tz).strftime("%d/%m/%Y %H:%M")
-    result += "\n"
-    result += f"*Última actualización: {time}*\n\n"
-    result += table
+    # result += "[Ranking](#clasificación-el-arte-de-programar-2025) • [Ranking final](#clasificación-final)</center>"
+    result += "<div style='display: flex; justify-content: center; gap: 1em'>"
+    result += "<a href='#clasificación-el-arte-de-programar-2025'>Ranking</a>"
+    result += "<p>•</p>"
+    result += "<a href='#clasificación-final'>Ranking final</a>"
+    result += "</div>"
+    result += "\n\n"
+
+    result += f"*Última actualización: {now_spain}*\n\n"
+    result += ranking_table
+    result += "\n\n"
+    result += "\n\n---\n\n"
+    result += "\n\n"
+    result += "## Clasificación final\n\n"
+    result += finished_table
 
     return result
 
@@ -85,10 +135,12 @@ def start():
     result = obtain_data(text)
     grades = sorted(obtain_grades(result), key=lambda x: -x[1][-1])
 
-    table = transform_table(get_table(grades))
+    ranking_table = get_ranking_table(grades)
+    finished_table = get_finished_table(grades)
 
-    with open("index.md", "w+") as f:
-        f.write(table)
+    index = create_index(ranking_table, finished_table)
+    with open(INDEX_FILE, "w+") as f:
+        f.write(index)
 
 if __name__ == "__main__":
     start()

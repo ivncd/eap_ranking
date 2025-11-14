@@ -1,4 +1,5 @@
 requests
+pandas
 bs4
 tabulate
 lxml

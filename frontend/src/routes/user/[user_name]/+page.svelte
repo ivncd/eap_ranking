@@ -96,7 +96,7 @@
               </a>
             </Table.Cell>
             <Table.Cell>{problem.contest_id}</Table.Cell>
-            <Table.Cell>{problem.problem_level}</Table.Cell>
+            <Table.Cell>{problem.level}</Table.Cell>
             <Table.Cell>{problem.grade}</Table.Cell>
           </Table.Row>
         {/each}

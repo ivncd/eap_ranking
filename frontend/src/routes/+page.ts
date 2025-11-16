@@ -9,12 +9,11 @@ type TableRow = {
 }
 
 export const load: PageLoad = () => {
-  const rankings: TableRow[] = Object.entries(rawData.data).map(
+  const rankings: TableRow[] = Object.entries(rawData.user_data).map(
     ([user, userData]) => ({
       user,
       ranking: userData.ranking,
       grades: userData.grades,
-      problems: userData.problems,
     })
   );
 

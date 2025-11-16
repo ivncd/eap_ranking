@@ -8,7 +8,7 @@
     CardTitle,
   } from "$lib/components/ui/card";
 
-  const { userName, rank, problemsList, grades } = data;
+  const { userName, rank, problemsList, problemRank, grades } = data;
 
   function getMax(grades: string): number {
     let max: number;
@@ -80,6 +80,7 @@
     <Table.Root>
       <Table.Header>
         <Table.Row class="bg-gray-100 dark:bg-gray-800">
+          <Table.Head>Rank</Table.Head>
           <Table.Head>ID</Table.Head>
           <Table.Head>Contest</Table.Head>
           <Table.Head>Level</Table.Head>
@@ -89,6 +90,7 @@
       <Table.Body>
         {#each problemsList as problem}
           <Table.Row class="hover:bg-gray-50 dark:hover:bg-gray-700">
+            <Table.Cell>{problemRank[problem.problem_id]}</Table.Cell>
             <Table.Cell class="font-medium">
               <a
                 href="https://aceptaelreto.com/problem/statement.php?id={problem.problem_id}"

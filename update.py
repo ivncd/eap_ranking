@@ -21,6 +21,7 @@ def obtain_text():
 
 def obtain_data(text : str):
     result = defaultdict(list)
+    problems = defaultdict(list)
     soup = BeautifulSoup(text, "lxml")
     tr = soup.find_all("tr")
     for row in tr[1:]:
@@ -32,9 +33,10 @@ def obtain_data(text : str):
         if contest_id == 11:
             continue
 
+        problems[problem_id].append({"user" : user, "grade" : grade})
         result[user].append({"id" : mat, "user" : user, "pid" : problem_id, "cid" : contest_id, "level" : level, "grade" : grade})
 
-    return result
+    return result, problems
 
 def obtain_grades(result):
     grades = {}
@@ -54,7 +56,7 @@ def obtain_grades(result):
 
     return grades
 
-def get_ranks(grades_list):
+def get_user_ranks(grades_list):
     ranks = {}
     prev_grade = None
     rank, display_rank = 0, 0
@@ -73,15 +75,35 @@ def get_ranks(grades_list):
 
     return ranks
 
-def create_database(result, grades, ranks):
-    final : Dict = {"last_updated" : now_spain, "data" : {}}
+def get_problem_ranks(problems):
+    problem_ranks = {}
+    for problem_id, instance_list in problems.items():
+        problem_ranks[problem_id] = {}
+        ordered = sorted(instance_list, key=lambda x: -x["grade"])
+        rank, display_rank = 0, 0
+        prev_grade = None
+        for data in ordered:
+            total = data["grade"]
+            rank += 1
+            if total != prev_grade:
+                display_rank = rank
+                prev_grade = total
+
+
+            problem_ranks[problem_id][data["user"]] = display_rank
+
+    return problem_ranks
+
+
+def create_database(result, grades, user_ranks, problem_ranks):
+    final : Dict = {"last_updated" : now_spain, "data" : {}, "problem_ranks" : problem_ranks}
     for user, user_grades in grades:
         data = [{"problem_id" : r["pid"], "contest_id" : r["cid"], "problem_level" : r["level"], "grade" : r["grade"]} for r in result[user]]
 
         final["data"][user] = {
-            "ranking" : ranks[user],
+            "ranking" : user_ranks[user],
             "problems" : data, 
-            "grades" : {"A" : user_grades[0], "AB" : user_grades[1], "ABC" : user_grades[2], "ABCD" : user_grades[3]}
+            "grades" : {"A" : user_grades[0], "AB" : user_grades[1], "ABC" : user_grades[2], "ABCD" : user_grades[3]},
         }
 
     return final
@@ -89,11 +111,12 @@ def create_database(result, grades, ranks):
 def start():
     text = obtain_text()
 
-    result = obtain_data(text)
+    result, problems = obtain_data(text)
     grades = sorted(obtain_grades(result).items(), key=lambda x: -x[1][-1])
-    ranks = get_ranks(grades)
+    user_ranks = get_user_ranks(grades)
+    problem_ranks = get_problem_ranks(problems)
 
-    data = create_database(result, grades, ranks)
+    data = create_database(result, grades, user_ranks, problem_ranks)
     with open(SAVE_FILE, "w+", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
 

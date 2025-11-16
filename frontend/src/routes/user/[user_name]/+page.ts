@@ -16,32 +16,44 @@ type UserData = {
   grades: Grades;
 }
 
+type ProblemRanks = {
+  [problemId: string]: {
+    [username: string]: number;
+  };
+};
+
 type RankingsJSON = {
   last_updated: string;
   data: Record<string, UserData>;
+  problem_ranks: ProblemRanks;
 }
 
 const rawData: RankingsJSON = rawDataJson;
 export const load: PageLoad = ({ params }) => {
   const userName: string = params.user_name;
-  let problemsList: Problem[] | null = null;
-  let grades: Grades | null = null;
-  let rank: number | null = null
 
   const userData: UserData | undefined = rawData.data[userName];
-  const exists: boolean = userData ? true : false;
-  if (!exists) {
+  if (!userData) {
     throw error(404, { message: `Usuario ${userName} no encontrado.` });
   }
 
-  rank = userData.ranking;
-  grades = userData.grades;
-  problemsList = userData.problems.sort((a, b) => b.contest_id - a.contest_id);
+  let rank: number = userData.ranking;
+  let grades: Grades = userData.grades;
+  let problemsList: Problem[] = userData.problems.sort((a, b) => b.contest_id - a.contest_id);
+
+  const problemRank: Record<string, number> = {};
+
+  for (const [problemId, users] of Object.entries(rawData.problem_ranks)) {
+    if (users[userName] !== undefined) {
+      problemRank[problemId] = users[userName];
+    }
+  }
 
   return {
     userName,
     rank,
     problemsList,
+    problemRank,
     grades
   };
 };

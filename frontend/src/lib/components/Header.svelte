@@ -3,9 +3,9 @@
   import { Button } from "$lib/components/ui/button";
   import { resolve } from "$app/paths";
 
-  import { toggleMode, mode } from "mode-watcher";
+  import { openMenu } from "$lib/stores";
 
-  let open = $state(false);
+  import { toggleMode, mode } from "mode-watcher";
 </script>
 
 <header
@@ -32,9 +32,9 @@
         variant="outline"
         size="icon"
         class="md:hidden"
-        onclick={() => (open = !open)}
+        onclick={() => openMenu.update((v) => !v)}
       >
-        {#if open}
+        {#if $openMenu}
           <X class="w-5 h-5" />
         {:else}
           <Menu class="w-5 h-5" />
@@ -42,17 +42,22 @@
       </Button>
 
       <!-- Mobile dropdown -->
-      {#if open}
+      {#if $openMenu}
         <nav
           class="
 				md:hidden absolute top-full left-0 w-full
 				flex flex-col gap-2 py-3
 				bg-card border-b shadow-lg
-				z-50 inset-shadow-sm
-			"
+				z-50 inset-shadow-sm border-t"
         >
           <!-- Add later border-b" -->
-          <a href={resolve("/")} class="py-3 px-5 hover:bg-muted/30">Home</a>
+          <a
+            href={resolve("/")}
+            class="py-3 px-5 hover:bg-muted/30"
+            onclick={() => openMenu.set(false)}
+          >
+            Ranking
+          </a>
         </nav>
       {/if}
 

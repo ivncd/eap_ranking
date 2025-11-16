@@ -1,6 +1,7 @@
 <script lang="ts">
   import * as Table from "$lib/components/ui/table/index.ts";
   import { resolve } from "$app/paths";
+  import { openMenu } from "$lib/stores.js";
 
   export let data;
   const { last_updated, rankings } = data;

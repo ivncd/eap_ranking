@@ -1,12 +1,7 @@
 <script lang="ts">
   import * as Table from "$lib/components/ui/table/index.ts";
   export let data;
-  import {
-    Card,
-    CardHeader,
-    CardContent,
-    CardTitle,
-  } from "$lib/components/ui/card";
+  import { Card, CardContent } from "$lib/components/ui/card";
 
   const { userName, rank, problemsList, problemRank, grades } = data;
 
@@ -49,7 +44,7 @@
 
 <div class="max-w-[1300px] mx-auto px-5 sm:px-8 lg:px-10 mt-10 mb-10">
   <div class="flex flex-row gap-2 justify-center items-baseline">
-    <h2 class="text-4xl font-bold">{userName}</h2>
+    <h2 class="text-3xl sm:text-4xl font-bold">{userName}</h2>
     <h3 class="text-xl text-amber-400 opacity-75">{rank}</h3>
   </div>
 

@@ -6,6 +6,8 @@
 	import Header from "$lib/components/Header.svelte";
 	// export const prerender = false;
 
+	import { openMenu } from "$lib/stores";
+
 	let { children } = $props();
 </script>
 

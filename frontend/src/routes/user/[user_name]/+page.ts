@@ -26,6 +26,7 @@ export const load: PageLoad = ({ params }) => {
   const userName: string = params.user_name;
   let problemsList: Problem[] | null = null;
   let grades: Grades | null = null;
+  let rank: number | null = null
 
   const userData: UserData | undefined = rawData.data[userName];
   const exists: boolean = userData ? true : false;
@@ -33,12 +34,13 @@ export const load: PageLoad = ({ params }) => {
     throw error(404, { message: `Usuario ${userName} no encontrado.` });
   }
 
+  rank = userData.ranking;
   grades = userData.grades;
   problemsList = userData.problems.sort((a, b) => b.contest_id - a.contest_id);
 
   return {
-    exists,
     userName,
+    rank,
     problemsList,
     grades
   };

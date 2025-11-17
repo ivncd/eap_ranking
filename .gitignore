@@ -26,7 +26,7 @@ vite.config.js.timestamp*
 .env
 .env.*
 !.env.example
-data.json
+*.json
 
 # ------------------------------------------------------
 # System files

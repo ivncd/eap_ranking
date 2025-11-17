@@ -1,27 +1,8 @@
-import type { Grades } from '$lib/types';
 import type { PageLoad } from './$types';
+import type { RankingsJSON, ProblemRanking } from '$lib/types';
+
 import { error } from '@sveltejs/kit';
 import rawDataJson from '$lib/data.json';
-
-type UserProblems = Record<string, number>;
-interface UserData {
-  ranking: number;
-  problems: UserProblems;
-  grades: Grades;
-}
-
-type ProblemRanking = Record<string, number>;
-interface ProblemData {
-  contest_id: number;
-  level: string;
-  ranking: ProblemRanking;
-}
-
-interface RankingsJSON {
-  last_updated: string;
-  user_data: Record<string, UserData>;
-  problems_data: Record<string, ProblemData>;
-}
 
 const rawData: RankingsJSON = rawDataJson;
 export const load: PageLoad = ({ params }) => {

@@ -1,6 +1,7 @@
 import type { PageLoad } from './$types';
-import type { Grades } from '$lib/types'
-import rawData from '$lib/data.json';
+import type { RankingsJSON, Grades } from '$lib/types'
+
+import rawDataJson from '$lib/data.json';
 
 type TableRow = {
   ranking: number,
@@ -8,6 +9,8 @@ type TableRow = {
   grades: Grades
 }
 
+
+const rawData: RankingsJSON = rawDataJson;
 export const load: PageLoad = () => {
   const rankings: TableRow[] = Object.entries(rawData.user_data).map(
     ([user, userData]) => ({

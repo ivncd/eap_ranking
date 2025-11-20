@@ -1,7 +1,6 @@
 <script lang="ts">
   import * as Table from "$lib/components/ui/table/index.ts";
   import { resolve } from "$app/paths";
-  import { openMenu } from "$lib/stores.js";
 
   export let data;
   const { last_updated, rankings } = data;
@@ -13,14 +12,12 @@
   <p class="text-center text-sm text-gray-500 italic">
     Última actualización: {last_updated}
   </p>
-  <!-- <Table.Root class="mt-5"> -->
 
   <div class="mt-5 overflow-hidden rounded-lg border shadow-lg">
     <Table.Root>
       <Table.Header>
-        <!-- <Table.Row> -->
         <Table.Row class="bg-gray-100 dark:bg-gray-800">
-          <Table.Head class="w-20 text-left">Ranking</Table.Head>
+          <Table.Head class="w-20 text-left">Clasificación</Table.Head>
           <Table.Head class="text-left">Usuario</Table.Head>
           <Table.Head class="text-center">Nota A /5</Table.Head>
           <Table.Head class="text-center">Nota A+B /7</Table.Head>

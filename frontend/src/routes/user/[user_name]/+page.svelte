@@ -63,7 +63,6 @@
                 class={`h-6 rounded ${gradeColor(gradeValue, gradeName)}`}
                 style={`width: ${getPercentage(gradeValue, gradeName)}%`}
               ></div>
-              <!-- Span inside the bar -->
               <span
                 class="absolute inset-0 flex items-center justify-center text-sm font-medium text-gray-800"
               >
@@ -80,11 +79,11 @@
     <Table.Root>
       <Table.Header>
         <Table.Row class="bg-gray-100 dark:bg-gray-800">
-          <Table.Head>Rank</Table.Head>
-          <Table.Head>ID</Table.Head>
-          <Table.Head>Contest</Table.Head>
-          <Table.Head>Level</Table.Head>
-          <Table.Head>Grade</Table.Head>
+          <Table.Head>Clasificación</Table.Head>
+          <Table.Head>Problema</Table.Head>
+          <Table.Head>Concurso</Table.Head>
+          <Table.Head>Nivel</Table.Head>
+          <Table.Head>Nota</Table.Head>
         </Table.Row>
       </Table.Header>
       <Table.Body>

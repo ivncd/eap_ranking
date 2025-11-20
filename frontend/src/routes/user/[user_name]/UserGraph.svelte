@@ -26,6 +26,7 @@
     B: number;
     C: number;
     D: number;
+    contestLabel: string;
   };
 
   const contests: ContestAggregated[] = Object.values(
@@ -34,12 +35,22 @@
         const { contest_id, level, grade } = problem;
 
         if (!acc[contest_id]) {
-          acc[contest_id] = { contest_id, A: 0, B: 0, C: 0, D: 0 };
+          acc[contest_id] = {
+            contest_id,
+            A: 0,
+            B: 0,
+            C: 0,
+            D: 0,
+            contestLabel: `Concurso ${contest_id}`,
+          };
         }
 
         if (level in acc[contest_id]) {
           acc[contest_id][
-            level as keyof Omit<ContestAggregated, "contest_id">
+            level as keyof Omit<
+              ContestAggregated,
+              "contest_id" | "contestLabel"
+            >
           ] += grade;
         }
 
@@ -58,7 +69,6 @@
           }
           return acc;
         },
-        // Initialize all to 0 first
         { A: 0, B: 0, C: 0, D: 0 },
       ),
     )
@@ -66,26 +76,25 @@
         level,
         number: count,
       }))
-      // ✨ THIS IS THE FIX: Remove items where number is 0
       .filter((item) => item.number > 0),
   );
 
   const chartConfig = {
     A: {
-      label: "Level A",
-      color: "#10b981", // Green → Easiest
+      label: "Nivel A",
+      color: "#10b981",
     },
     B: {
-      label: "Level B",
-      color: "#facc15", // Yellow → Medium
+      label: "Nivel B",
+      color: "#facc15",
     },
     C: {
-      label: "Level C",
-      color: "#ef4444", // Red → Hardest
+      label: "Nivel C",
+      color: "#ef4444",
     },
     D: {
-      label: "Level D",
-      color: "#8b5cf6", // Purple → Optional/Extra-Hard
+      label: "Nivel D",
+      color: "#8b5cf6",
     },
   } satisfies Chart.ChartConfig;
 
@@ -97,7 +106,7 @@
 
 <div class="mt-10 grid w-full grid-cols-1 gap-4 md:grid-cols-2">
   <Card.Root class="w-full">
-    <Card.Header class="-mb-5">
+    <Card.Header class="-mb-3">
       <Card.Title class="text-center">Notas por concurso participado</Card.Title
       >
     </Card.Header>
@@ -110,7 +119,7 @@
         >
           <BarChart
             data={contests}
-            x="contest_id"
+            x="contestLabel"
             xScale={scaleBand().padding(0.2)}
             axis="x"
             seriesLayout="stack"
@@ -151,7 +160,7 @@
   </Card.Root>
 
   <Card.Root class="flex flex-col">
-    <Card.Header class="-mb-5">
+    <Card.Header class="-mb-3">
       <Card.Title class="text-center">Problemas realizados por nivel</Card.Title
       >
     </Card.Header>

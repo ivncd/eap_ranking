@@ -2,8 +2,11 @@
   import * as Table from "$lib/components/ui/table/index.ts";
   export let data;
   import { Card, CardContent } from "$lib/components/ui/card";
+  import UserGraph from "./UserGraph.svelte";
 
   const { userName, rank, problemsList, problemRank, grades } = data;
+
+  console.log(problemsList);
 
   function getMax(grades: string): number {
     let max: number;
@@ -47,6 +50,8 @@
     <h2 class="text-3xl sm:text-4xl font-bold">{userName}</h2>
     <h3 class="text-xl text-amber-400 opacity-75">{rank}</h3>
   </div>
+
+  <UserGraph problems={problemsList}></UserGraph>
 
   <Card class="max-w-[1300px] mx-auto my-10 py-5">
     <CardContent>

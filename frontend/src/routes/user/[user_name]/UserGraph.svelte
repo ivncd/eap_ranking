@@ -26,7 +26,6 @@
     B: number;
     C: number;
     D: number;
-    contestLabel: string;
   };
 
   const contests: ContestAggregated[] = Object.values(
@@ -41,16 +40,12 @@
             B: 0,
             C: 0,
             D: 0,
-            contestLabel: `Concurso ${contest_id}`,
           };
         }
 
         if (level in acc[contest_id]) {
           acc[contest_id][
-            level as keyof Omit<
-              ContestAggregated,
-              "contest_id" | "contestLabel"
-            >
+            level as keyof Omit<ContestAggregated, "contest_id">
           ] += grade;
         }
 
@@ -113,14 +108,11 @@
 
     <Card.Content>
       <div class="overflow-x-auto pb-4">
-        <Chart.Container
-          config={chartConfig}
-          class="h-[250px] w-full min-w-[500px]"
-        >
+        <Chart.Container config={chartConfig} class="h-[200px] w-full">
           <BarChart
             data={contests}
-            x="contestLabel"
-            xScale={scaleBand().padding(0.2)}
+            x="contest_id"
+            xScale={scaleBand().padding(0.25)}
             axis="x"
             seriesLayout="stack"
             series={[

@@ -19,7 +19,7 @@ export const load: PageLoad = ({ params }) => {
     .map(([problemId, grade]) => {
       const pdata = rawData.problems_data[problemId];
       return {
-        problem_id: problemId,
+        problem_id: parseInt(problemId, 10),
         grade,
         contest_id: pdata.contest_id,
         level: pdata.level

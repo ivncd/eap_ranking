@@ -39,6 +39,32 @@ def obtain_data(text: str):
         if contest_id == 11:
             continue
 
+        if problem_id not in problems:
+            problems[problem_id] = {
+                "contest_id": contest_id,
+                "level": level,
+                "user_data": [],
+            }
+
+        # Handle duplicate problem IDs from different contests
+        elif problems[problem_id]["contest_id"] != contest_id:
+            exists = False
+            while problem_id in problems:
+                if problems[problem_id]["contest_id"] == contest_id:
+                    exists = True
+                    break
+
+                problem_id += 0.1  # We assume there is no more than ten 10 instances of the same problem ID
+
+            if not exists:
+                problems[problem_id] = {
+                    "contest_id": contest_id,
+                    "level": level,
+                    "user_data": [],
+                }
+
+        problems[problem_id]["user_data"].append({"user": user, "grade": grade})
+
         result[user].append(
             {
                 "id": mat,
@@ -49,15 +75,6 @@ def obtain_data(text: str):
                 "grade": grade,
             }
         )
-
-        if problem_id not in problems:
-            problems[problem_id] = {
-                "contest_id": contest_id,
-                "level": level,
-                "user_data": [],
-            }
-
-        problems[problem_id]["user_data"].append({"user": user, "grade": grade})
 
     return result, problems
 

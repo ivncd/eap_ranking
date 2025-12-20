@@ -6,8 +6,6 @@
 
   const { userName, rank, problemsList, problemRank, grades } = data;
 
-  console.log(problemsList);
-
   function getMax(grades: string): number {
     let max: number;
 

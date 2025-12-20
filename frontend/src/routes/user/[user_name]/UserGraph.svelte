@@ -6,7 +6,7 @@
 
   let { problems } = $props<{
     problems: {
-      problem_id: string;
+      problem_id: number;
       grade: number;
       contest_id: number;
       level: string;

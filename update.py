@@ -16,18 +16,22 @@ URL = "http://138.100.11.198/notas"
 SAVE_FILE = "frontend/src/lib/data.json"
 # SAVE_FILE = "data.json"
 
+
 def obtain_text():
     r = requests.get(URL)
     return r.text
 
-def obtain_data(text : str):
+
+def obtain_data(text: str):
     result = defaultdict(list)
     problems = defaultdict(dict)
     soup = BeautifulSoup(text, "lxml")
     tr = soup.find_all("tr")
 
     for row in tr[1:]:
-        mat, user, problem_id, contest_id, level, grade = [col.getText().strip() for col in row.children if col.getText().strip() != ""]
+        mat, user, problem_id, contest_id, level, grade = [
+            col.getText().strip() for col in row.children if col.getText().strip() != ""
+        ]
         contest_id = int(contest_id)
         problem_id = int(problem_id)
         grade = round(float(grade), 2)
@@ -35,14 +39,28 @@ def obtain_data(text : str):
         if contest_id == 11:
             continue
 
-        result[user].append({"id" : mat, "user" : user, "pid" : problem_id, "cid" : contest_id, "level" : level, "grade" : grade})
+        result[user].append(
+            {
+                "id": mat,
+                "user": user,
+                "pid": problem_id,
+                "cid": contest_id,
+                "level": level,
+                "grade": grade,
+            }
+        )
 
         if problem_id not in problems:
-            problems[problem_id] = {"contest_id" : contest_id, "level" : level, "user_data" : []}
+            problems[problem_id] = {
+                "contest_id": contest_id,
+                "level": level,
+                "user_data": [],
+            }
 
-        problems[problem_id]["user_data"].append({"user" : user, "grade" : grade})
+        problems[problem_id]["user_data"].append({"user": user, "grade": grade})
 
     return result, problems
+
 
 def obtain_grades(result):
     grades = {}
@@ -62,6 +80,7 @@ def obtain_grades(result):
 
     return grades
 
+
 def get_user_ranks(grades_list):
     ranks = {}
     prev_grade = None
@@ -78,11 +97,16 @@ def get_user_ranks(grades_list):
 
     return ranks
 
+
 def get_problem_data(problems):
     problem_data = {}
     for problem_id in problems.keys():
         ordered = sorted(problems[problem_id]["user_data"], key=lambda x: -x["grade"])
-        problem_data[problem_id] = {"contest_id" : problems[problem_id]["contest_id"], "level" : problems[problem_id]["level"], "ranking" : {}}
+        problem_data[problem_id] = {
+            "contest_id": problems[problem_id]["contest_id"],
+            "level": problems[problem_id]["level"],
+            "ranking": {},
+        }
 
         prev_grade = None
         rank, display_rank = 0, 0
@@ -101,17 +125,27 @@ def get_problem_data(problems):
 
 
 def create_database(result, grades, user_ranks, problem_data):
-    final : Dict = {"last_updated" : now_spain, "user_data" : {}, "problems_data" : problem_data}
-    for user, user_grades in grades:
-        problem_grades = {r["pid"] : r["grade"] for r in result[user]}
+    final: Dict = {
+        "last_updated": now_spain,
+        "user_data": {},
+        "problems_data": problem_data,
+    }
+    for user, user_grades in sorted(grades, key=lambda x: x[0]):
+        problem_grades = {r["pid"]: r["grade"] for r in result[user]}
 
         final["user_data"][user] = {
-            "ranking" : user_ranks[user],
-            "problems" : problem_grades, 
-            "grades" : {"A" : user_grades[0], "AB" : user_grades[1], "ABC" : user_grades[2], "ABCD" : user_grades[3]},
+            "ranking": user_ranks[user],
+            "problems": problem_grades,
+            "grades": {
+                "A": user_grades[0],
+                "AB": user_grades[1],
+                "ABC": user_grades[2],
+                "ABCD": user_grades[3],
+            },
         }
 
     return final
+
 
 def start():
     text = obtain_text()
@@ -124,6 +158,7 @@ def start():
     data = create_database(result, grades, user_ranks, problem_data)
     with open(SAVE_FILE, "w+", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
+
 
 if __name__ == "__main__":
     start()

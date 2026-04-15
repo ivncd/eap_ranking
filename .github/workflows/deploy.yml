@@ -2,7 +2,7 @@ name: Update DB + Build Frontend + Deploy
 
 on:
   schedule:
-    - cron: "20 18 * * 4"
+    - cron: "20 18 * 1,9-12 4"
   workflow_dispatch:
 
 permissions:
